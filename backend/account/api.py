@@ -11,10 +11,10 @@ def signup(request):
     message = 'success'
     
     form = SignupForm({
-        'email': data.get('email')
-        'name': data.get('name')
-        'password1': data.get('password1')
-        'password2': data.get('password2')
+        'email': data.get('email'),
+        'name': data.get('name'),
+        'password1': data.get('password1'),
+        'password2': data.get('password2'),
     })
 
     if form.is_valid():
@@ -22,6 +22,7 @@ def signup(request):
 
         # send email verification later
     else:
-        message = 'error'
-    
-    return JsonResponse({'status': message})
+        message = 'errorrrs'
+        print(form.errors)
+        return JsonResponse({'message': form.errors}, status=400)
+    return JsonResponse({'message': message})

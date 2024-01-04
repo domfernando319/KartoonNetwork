@@ -2,7 +2,9 @@
 import { RouterLink, RouterView } from 'vue-router'
 import HelloWorld from './components/HelloWorld.vue'
 </script> -->
-
+<script>
+    import Toast from '@/components/Toast.vue'
+</script>
 <template>
     <nav class="py-10 px-8 border-b border-gray-200">
         <div class="max-w-7xl mx-auto">
