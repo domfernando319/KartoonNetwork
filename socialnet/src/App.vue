@@ -4,6 +4,11 @@ import HelloWorld from './components/HelloWorld.vue'
 </script> -->
 <script>
     import Toast from '@/components/Toast.vue'
+    export default {
+        components: {
+            Toast
+        }
+    }
 </script>
 <template>
     <nav class="py-10 px-8 border-b border-gray-200">
@@ -51,5 +56,6 @@ import HelloWorld from './components/HelloWorld.vue'
     <main class="px-8 py-6 bg-gray-100">
         <RouterView />
     </main>
+    <Toast />
 </template>
 

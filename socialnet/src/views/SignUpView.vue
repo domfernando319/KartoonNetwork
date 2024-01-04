@@ -6,9 +6,9 @@ export default {
 	setup() {
 		const toastStore = useToastStore()
 
-		return {
-			toastStore
-		}
+		// return {
+		// 	toastStore
+		// }
 	},
 
 	data() {
@@ -53,6 +53,7 @@ export default {
                             this.form.password1 = ''
                             this.form.password2 = ''
                         } else {
+							console.log(response.data.errors)
                             this.toastStore.showToast(5000, 'Something went wrong. Please try again', 'bg-red-300')
                         }
 					})
