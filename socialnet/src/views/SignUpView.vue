@@ -1,14 +1,14 @@
 <script>
-import { useToastStore } from '@/stores/toast';
+import { useToastStore } from '../stores/toast';
 import axios from 'axios'
 
 export default {
 	setup() {
 		const toastStore = useToastStore()
 
-		// return {
-		// 	toastStore
-		// }
+		return {
+			toastStore
+		}
 	},
 
 	data() {

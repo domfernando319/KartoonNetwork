@@ -35,7 +35,7 @@ export const useUserStore = defineStore({
 
             this.user.access = data.access
             this.user.refresh = data.refresh
-            this.iser.isAuthenticated = true
+            this.user.isAuthenticated = true
             localStorage.setItem('user.access', data.access)
             localStorage.setItem('user.refresh', data.refresh)
             console.log('user.access: ', localStorage.getItem('user.access'))
