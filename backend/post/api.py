@@ -3,6 +3,9 @@ from .serializers import PostSerializer
 from .models import Post
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from .forms import PostForm
+from account.models import User
+from account.serializers import UserSerializer
+
 # Create your views here.
 
 @api_view(['GET'])
@@ -15,9 +18,14 @@ def post_list(request):
 @api_view(['GET'])
 def post_list_profile(request, id): #id will be own user id or id of user youre visiting
     posts = Post.objects.filter(created_by_id=id)
+    user = User.objects.get(pk=id)
 
-    serializer = PostSerializer(posts, many=True)
-    return JsonResponse(serializer.data, safe=False)
+    posts_serializer = PostSerializer(posts, many=True)
+    user_serializer = UserSerializer(user)
+    return JsonResponse({
+        'posts': posts_serializer.data,
+        'user': user_serializer.data
+    }, safe=False)
 
 
 # POST == create
