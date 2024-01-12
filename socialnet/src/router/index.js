@@ -5,6 +5,8 @@ import LoginView from '../views/LoginView.vue'
 import FeedView from '../views/FeedView.vue'
 import MessagesView from '../views/MessagesView.vue'
 import SearchView from '../views/SearchView.vue'
+import ProfileView from '../views/ProfileView.vue'
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -45,6 +47,11 @@ const router = createRouter({
       path: '/search',
       name: 'search',
       component: SearchView
+    },
+    {
+      path: '/profile/:id',
+      name: 'profile',
+      component: ProfileView
     },
   ]
 })
