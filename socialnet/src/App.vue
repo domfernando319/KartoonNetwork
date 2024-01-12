@@ -69,9 +69,10 @@ import HelloWorld from './components/HelloWorld.vue'
 
                 <div class="menu-right">
                     <template v-if="userStore.user.isAuthenticated">
-                        <a href="#">
+                        <!-- Using ROuter LInk to create link with dynamic parameters -->
+                        <RouterLink :to="{name: 'profile', params:{'id': userStore.user.id}}">
                             <img src="https://i.pravatar.cc/40?img=70" class="rounded-full">
-                        </a>                        
+                        </RouterLink>                        
                     </template>
                     <template v-else>
                         <RouterLink to="/login" class="mr-4 py-4 px-6 bg-gray-600 text-white rounded-lg">Log in</RouterLink>
