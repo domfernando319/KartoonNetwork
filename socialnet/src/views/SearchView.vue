@@ -7,7 +7,9 @@ export default {
     components: { PeopleYouMayKnow, Trends },
     data() {
         return {
-            query:''
+            query:'',
+            users: [],
+            posts: [],
         }
     },
     methods: {
@@ -19,7 +21,8 @@ export default {
             })
             .then(response => {
                 console.log('response: ', response)
-
+                this.users = response.data.users
+                this.posts = response.data.posts
             })
             .catch(err => {
                 console.log('error')
@@ -37,59 +40,23 @@ export default {
                 <form v-on:submit.prevent="submitForm" class="p-4 flex space-x-4">  
                     <input v-model="query" type="search" class="p-4 w-full bg-gray-100 rounded-lg" placeholder="What are you looking for?">
 
-                    <button href="#" class="inline-block py-4 px-6 bg-purple-600 text-white rounded-lg">Post</button>
+                    <button href="#" class="inline-block py-4 px-6 bg-purple-600 text-white rounded-lg">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                        </svg>
+                    </button>
                 </form>
             </div>
 
-            <div class="p-4 bg-white border border-gray-200 rounded-lg grid grid-cols-4 gap-4">
-                <div class="p-4 text-center bg-gray-100 rounded-lg">
+            <div class="p-4 bg-white border border-gray-200 rounded-lg grid grid-cols-4 gap-4" v-if="users.length">
+                <div class="p-4 text-center bg-gray-100 rounded-lg" v-for="user in users">
                     <img src="https://i.pravatar.cc/300?img=70" class="mb-6 rounded-full">
                 
-                    <p><strong>Code With Stein</strong></p>
-
-                    <div class="mt-6 flex space-x-8 justify-around">
-                        <p class="text-xs text-gray-500">182 friends</p>
-                        <p class="text-xs text-gray-500">120 posts</p>
-                    </div>
-                </div>
-
-                <div class="p-4 text-center bg-gray-100 rounded-lg">
-                    <img src="https://i.pravatar.cc/300?img=70" class="mb-6 rounded-full">
-                
-                    <p><strong>Code With Stein</strong></p>
-
-                    <div class="mt-6 flex space-x-8 justify-around">
-                        <p class="text-xs text-gray-500">182 friends</p>
-                        <p class="text-xs text-gray-500">120 posts</p>
-                    </div>
-                </div>
-
-                <div class="p-4 text-center bg-gray-100 rounded-lg">
-                    <img src="https://i.pravatar.cc/300?img=70" class="mb-6 rounded-full">
-                
-                    <p><strong>Code With Stein</strong></p>
-
-                    <div class="mt-6 flex space-x-8 justify-around">
-                        <p class="text-xs text-gray-500">182 friends</p>
-                        <p class="text-xs text-gray-500">120 posts</p>
-                    </div>
-                </div>
-
-                <div class="p-4 text-center bg-gray-100 rounded-lg">
-                    <img src="https://i.pravatar.cc/300?img=70" class="mb-6 rounded-full">
-                
-                    <p><strong>Code With Stein</strong></p>
-
-                    <div class="mt-6 flex space-x-8 justify-around">
-                        <p class="text-xs text-gray-500">182 friends</p>
-                        <p class="text-xs text-gray-500">120 posts</p>
-                    </div>
-                </div>
-
-                <div class="p-4 text-center bg-gray-100 rounded-lg">
-                    <img src="https://i.pravatar.cc/300?img=70" class="mb-6 rounded-full">
-                
-                    <p><strong>Code With Stein</strong></p>
+                    <p>
+                        <strong>
+                            <RouterLink :to="{name: 'profile', params:{'id': user.id}}">{{ user.name }}</RouterLink>
+                        </strong>
+                    </p>
 
                     <div class="mt-6 flex space-x-8 justify-around">
                         <p class="text-xs text-gray-500">182 friends</p>
@@ -98,19 +65,27 @@ export default {
                 </div>
             </div>
 
-            <div class="p-4 bg-white border border-gray-200 rounded-lg">
+            <div 
+                class="p-4 bg-white border border-gray-200 rounded-lg"
+                v-for="post in posts"
+                v-bind:key="post.id"
+            >
                 <div class="mb-6 flex items-center justify-between">
                     <div class="flex items-center space-x-6">
                         <img src="https://i.pravatar.cc/300?img=70" class="w-[40px] rounded-full">
                         
-                        <p><strong>Code With Stein</strong></p>
+                        <p>
+                            <strong>
+                                <RouterLink :to="{name: 'profile', params:{'id': user.id}}">{{ post.created_by.name }}</RouterLink>
+                            </strong>
+                        </p>
                     </div>
 
-                    <p class="text-gray-600">28 minutes ago</p>
+                    <p class="text-gray-600">{{post.created_at_formatted}} ago</p>
                 </div>
 
                 <p>
-                    This is just a random text post. This is just a random text post. This is just a random text post. This is just a random text post.
+                    {{ post.body }}
                 </p>
 
                 <div class="my-6 flex justify-between">
