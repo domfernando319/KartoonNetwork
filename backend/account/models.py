@@ -49,7 +49,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = []
 
 
-class FriendshipRequest(models.Model):
+class FriendRequest(models.Model):
     SENT = 'sent'
     ACCEPTED = 'accepted'
     REJECTED = 'rejected'
@@ -67,4 +67,3 @@ class FriendshipRequest(models.Model):
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default=SENT)
 
     # now when a user accepts this request I want to add to friends list
-    

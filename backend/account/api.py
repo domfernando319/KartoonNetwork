@@ -2,7 +2,7 @@ from django.http import JsonResponse
 
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from .forms import SignupForm
-
+from .models import User, FriendRequest
 
 @api_view(['GET'])
 def me(request):
@@ -36,3 +36,16 @@ def signup(request):
         status = 400
         # return JsonResponse({'message': form.errors}, status=400)
     return JsonResponse({'message': message, 'errors': form.errors}, status=status)
+
+
+
+@api_view(['POST'])
+def send_friend_request(request, pk):
+        # get user from database
+        user = User.objects.get(pk=pk)
+
+        friend_request = FriendRequest(created_for=user, created_by=request.user)
+
+        return JsonResponse({
+             'message': 'friend request created'
+        })

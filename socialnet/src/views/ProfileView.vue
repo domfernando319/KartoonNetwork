@@ -33,11 +33,7 @@ export default {
         this.getFeed()
     },
 
-    // beforeRouteUpdate (to, from, next) {
-    //     if (from.name === to.name) {
-    //         this.getFeed()
-    //     }
-    // },
+    
     watch: {
         '$route.params.id': {
             handler: function() {
@@ -52,7 +48,7 @@ export default {
     methods: {
         getFeed() {
            axios
-            .get(`/api/posts/profile/${this.$route.params.id}`)
+            .get(`/api/posts/profile/${this.$route.params.id}/`)
             .then(response => {
                 console.log('data', response.data)
                 this.posts = response.data.posts
@@ -71,6 +67,18 @@ export default {
                 .then(response => {
                     console.log('data', response.data)
                     this.posts.unshift(response.data)
+                })
+                .catch(error => {
+                    console.log('error', error)
+                })
+        },
+
+        sendFriendRequest() {
+            axios
+                .post(`/api/friends/request/${this.$route.params.id}/`)
+                .then(response => {
+                    console.log('data', response.data)
+                    this.user = response.data.user
                 })
                 .catch(error => {
                     console.log('error', error)
@@ -95,6 +103,10 @@ export default {
                 <div class="mt-6 flex space-x-8 justify-around">
                     <p class="text-xs text-gray-500">182 friends</p>
                     <p class="text-xs text-gray-500">120 posts</p>
+                </div>
+
+                <div class="mt-6">
+                    <button class="inline-block py-1 px-4 bg-purple-600 text-xs text-white rounded-lg" style="white-space: nowrap;" @click="sendFriendRequest">Add friend</button>
                 </div>
             </div>
         </div>
