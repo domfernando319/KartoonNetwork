@@ -1,6 +1,8 @@
 from django.http import JsonResponse
 
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
+
+from .serializers import UserSerializer, FriendRequestSerializer
 from .forms import SignupForm
 from .models import User, FriendRequest
 
@@ -38,6 +40,20 @@ def signup(request):
     return JsonResponse({'message': message, 'errors': form.errors}, status=status)
 
 
+@api_view(['GET'])
+def friends(request, pk):
+    user = User.objects.get(pk=pk)
+
+    if user == request.user:
+        requests = FriendRequest.objects.filter(created_for=request.user)
+    
+    friends = user.friends.all()
+
+    return JsonResponse({
+         'user': UserSerializer(user),
+         'friends': UserSerializer(friends, many=True),
+         'requests': FriendRequestSerializer(requests, many=True)
+    }, safe=False)
 
 @api_view(['POST'])
 def send_friend_request(request, pk):
