@@ -44,6 +44,13 @@ def signup(request):
 def friends(request, pk):
     user = User.objects.get(pk=pk)
     requests = []
+
+    u = request.user
+    u.friends_count = 1
+    u.save()
+
+    user.friends_count = 1
+    user.save()
     if user == request.user:
         requests = FriendRequest.objects.filter(created_for=request.user, status=FriendRequest.SENT)
         requests = FriendRequestSerializer(requests, many=True)
@@ -75,6 +82,11 @@ def handle_request(request, pk, status):
      friend_request.save()
 
      user.friends.add(request.user)
+     user.friends_count = user.friends_count + 1
      user.save()
+
+     request_user = request.user
+     request_user.friends_count += 1
+     request_user.save()
 
      return JsonResponse({'message': 'friend request updated'})
