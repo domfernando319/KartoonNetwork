@@ -68,11 +68,19 @@ def send_friend_request(request, pk):
         # get user from database
         user = User.objects.get(pk=pk)
 
-        friend_request = FriendRequest.objects.create(created_for=user, created_by=request.user)
+        user_to_you = FriendRequest.objects.filter(created_for=request.user).filter(created_by=user)
+        you_to_user = FriendRequest.objects.filter(created_for=user).filter(created_by=request.user)
 
-        return JsonResponse({
+        if not user_to_you or not you_to_user:
+            FriendRequest.objects.create(created_for=user, created_by=request.user)
+
+            return JsonResponse({
              'message': 'friend request created'
-        })
+            })
+        else:
+             return JsonResponse({
+             'message': 'friend request already sent'
+            })
 
 @api_view(['POST'])
 def handle_request(request, pk, status):

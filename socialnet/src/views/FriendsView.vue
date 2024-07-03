@@ -4,6 +4,7 @@ import PeopleYouMayKnow from '@/components/PeopleYouMayKnow.vue';
 import Trends from '@/components/Trends.vue';
 import axios from 'axios';
 import { useUserStore } from '../stores/user';
+
 export default (await import('vue')).defineComponent ({
     name: 'FriendsView',
     setup() {
@@ -50,7 +51,7 @@ export default (await import('vue')).defineComponent ({
             axios
                 .post(`/api/friends/${pk}/${status}/`)
                 .then(response => {
-                    console.log('data', response.data)           
+                    console.log('data', response.data)   
                 })
                 .catch(err => {
                     console.log('error', err)

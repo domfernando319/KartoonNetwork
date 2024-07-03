@@ -5,14 +5,17 @@ import Trends from '@/components/Trends.vue';
 import FeedItem from '@/components/FeedItem.vue';
 import axios from 'axios';
 import { useUserStore } from '../stores/user';
+import { useToastStore } from '@/stores/toast';
 import { RouterLink } from 'vue-router';
 export default {
     name: 'FeedView',
     setup() {
         const userStore = useUserStore()
+        const toastStore = useToastStore()
 
         return {
-            userStore
+            userStore,
+            toastStore
         }
     },
     components: {
@@ -26,7 +29,9 @@ export default {
     data() {
         return {
             posts: [],
-            user:{},
+            user:{
+                id: null
+            },
             body: '',
 
         }
@@ -80,8 +85,12 @@ export default {
             axios
                 .post(`/api/friends/${this.$route.params.id}/request/`)
                 .then(response => {
-                    console.log('data', response.data)
-                    this.user = response.data.user
+                    console.log("ahhhhh")
+                    if (response.data.message == 'request already sent') {
+                        this.toastStore.showToast(5000, 'A request has already been sent!', 'bg-red-300')
+                    } else {
+                        this.toastStore.showToast(5000, 'Friend request sent!', 'bg-emerald-300')
+                    }
                 })
                 .catch(error => {
                     console.log('error', error)
