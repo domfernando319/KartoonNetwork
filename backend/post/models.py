@@ -6,6 +6,11 @@ from django.contrib.humanize.templatetags.humanize import naturaltime
 
 # Create your models here.
 
+class Like(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    liked_by = models.ForeignKey(User, related_name='likes', on_delete=models.CASCADE)
+    liked_at = models.DateTimeField(auto_now_add=True)
+
 
 class PostAttachment(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -18,8 +23,8 @@ class Post(models.Model):
 
     attachments = models.ManyToManyField(PostAttachment, blank=True)
     
-    #likes
-    #likescount
+    likes = models.ManyToManyField(Like, blank=True)
+    likes_count = models.IntegerField(default=0)
 
 
     # when is it created and by who

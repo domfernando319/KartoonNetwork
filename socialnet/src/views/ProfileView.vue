@@ -5,25 +5,33 @@ import Trends from '@/components/Trends.vue';
 import FeedItem from '@/components/FeedItem.vue';
 import axios from 'axios';
 import { useUserStore } from '../stores/user';
+import { useToastStore } from '@/stores/toast';
+import { RouterLink } from 'vue-router';
 export default {
     name: 'FeedView',
     setup() {
         const userStore = useUserStore()
+        const toastStore = useToastStore()
 
         return {
-            userStore
+            userStore,
+            toastStore
         }
     },
     components: {
-        PeopleYouMayKnow,
-        Trends,
-        FeedItem
-    },
+    PeopleYouMayKnow,
+    Trends,
+    FeedItem,
+    PeopleYouMayKnow,
+    RouterLink
+},
 
     data() {
         return {
             posts: [],
-            user:{},
+            user:{
+                id: null
+            },
             body: '',
 
         }
@@ -33,11 +41,7 @@ export default {
         this.getFeed()
     },
 
-    // beforeRouteUpdate (to, from, next) {
-    //     if (from.name === to.name) {
-    //         this.getFeed()
-    //     }
-    // },
+    
     watch: {
         '$route.params.id': {
             handler: function() {
@@ -52,7 +56,7 @@ export default {
     methods: {
         getFeed() {
            axios
-            .get(`/api/posts/profile/${this.$route.params.id}`)
+            .get(`/api/posts/profile/${this.$route.params.id}/`)
             .then(response => {
                 console.log('data', response.data)
                 this.posts = response.data.posts
@@ -75,7 +79,32 @@ export default {
                 .catch(error => {
                     console.log('error', error)
                 })
+        },
+
+        sendFriendRequest() {
+            axios
+                .post(`/api/friends/${this.$route.params.id}/request/`)
+                .then(response => {
+                    console.log("ahhhhh")
+                    if (response.data.message == 'request already sent') {
+                        this.toastStore.showToast(5000, 'A request has already been sent!', 'bg-red-300')
+                    } else {
+                        this.toastStore.showToast(5000, 'Friend request sent!', 'bg-emerald-300')
+                    }
+                })
+                .catch(error => {
+                    console.log('error', error)
+                })
+        },
+
+        logout() {
+            console.log("log out")
+            this.userStore.removeToken()
+            this.$router.push('/login')
         }
+
+
+
     }
 }
 
@@ -87,19 +116,39 @@ export default {
     <div class="max-w-7xl mx-auto grid grid-cols-4 gap-4">
 
         <div class="main-left col-span-1">
-            <div class="p-4 bg-white border border-gray-200 text-center rounded-lg">
-                <img src="https://i.pravatar.cc/300?img=70" class="mb-6 rounded-full">
-                
-                <p><strong>{{user.name}}</strong></p>
+            <div v-if="user" class="p-4 bg-white border border-gray-200 text-center rounded-lg">
 
+                <img src="https://i.pravatar.cc/300?img=70" class="mb-6 rounded-full">
+                <p><strong>{{user.name}}</strong></p>
                 <div class="mt-6 flex space-x-8 justify-around">
-                    <p class="text-xs text-gray-500">182 friends</p>
+                    <RouterLink :to="{name: 'friends', params: {id: user.id}}" class="text-xs text-gray-500">{{user.friends_count}} friends</RouterLink>
                     <p class="text-xs text-gray-500">120 posts</p>
+                </div>
+
+                <div class="mt-6" >
+                    <button 
+                        class="inline-block py-1 px-4 bg-purple-600 text-xs text-white rounded-lg" 
+                        style="white-space: nowrap;" 
+                        @click="sendFriendRequest"
+                        v-if="userStore.user.id !== user.id"
+                    >
+                        Add friend
+                    </button>
+
+                    <button 
+                        class="inline-block py-1 px-4 bg-red-600 text-xs text-white rounded-lg" 
+                        style="white-space: nowrap;" 
+                        @click="logout"
+                        v-if="userStore.user.id === user.id"
+                    >
+                        Log Out
+                    </button>
+
                 </div>
             </div>
         </div>
 
-        <div class="main-center col-span-2 space-y-4">
+        <div v-if="user" class="main-center col-span-2 space-y-4">
 
             <div class="bg-white border border-gray-200 rounded-lg" v-if="userStore.user.id === user.id">
                 <form v-on:submit.prevent="submitForm" method="post">
@@ -130,102 +179,8 @@ export default {
             </div>
         </div>
         <div class="main-right col-span-1 space-y-4">
-            <div class="p-4 bg-white border border-gray-200 rounded-lg">
-                <h3 class="mb-6 text-xl">People you may know</h3>
-
-                <div class="space-y-4">
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center space-x-2">
-                            <img src="https://i.pravatar.cc/300?img=70" class="w-[40px] rounded-full">
-                            
-                            <p class="text-xs"><strong>Code With Stein</strong></p>
-                        </div>
-
-                        <a href="#" class="py-2 px-3 bg-purple-600 text-white text-xs rounded-lg">Show</a>
-                    </div>
-
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center space-x-2">
-                            <img src="https://i.pravatar.cc/300?img=70" class="w-[40px] rounded-full">
-                            
-                            <p class="text-xs"><strong>Code With Stein</strong></p>
-                        </div>
-
-                        <a href="#" class="py-2 px-3 bg-purple-600 text-white text-xs rounded-lg">Show</a>
-                    </div>
-
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center space-x-2">
-                            <img src="https://i.pravatar.cc/300?img=70" class="w-[40px] rounded-full">
-                            
-                            <p class="text-xs"><strong>Code With Stein</strong></p>
-                        </div>
-
-                        <a href="#" class="py-2 px-3 bg-purple-600 text-white text-xs rounded-lg">Show</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="p-4 bg-white border border-gray-200 rounded-lg">
-                <h3 class="mb-6 text-xl">Trends</h3>
-
-                <div class="space-y-4">
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center space-x-2">
-                            <p class="text-xs">
-                                <strong>#codewithstein</strong><br>
-                                <span class="text-gray-500">180 posts</span>
-                            </p>
-                        </div>
-
-                        <a href="#" class="py-2 px-3 bg-purple-600 text-white text-xs rounded-lg">Explore</a>
-                    </div>
-
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center space-x-2">
-                            <p class="text-xs">
-                                <strong>#codewithstein</strong><br>
-                                <span class="text-gray-500">180 posts</span>
-                            </p>
-                        </div>
-
-                        <a href="#" class="py-2 px-3 bg-purple-600 text-white text-xs rounded-lg">Explore</a>
-                    </div>
-
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center space-x-2">
-                            <p class="text-xs">
-                                <strong>#codewithstein</strong><br>
-                                <span class="text-gray-500">180 posts</span>
-                            </p>
-                        </div>
-
-                        <a href="#" class="py-2 px-3 bg-purple-600 text-white text-xs rounded-lg">Explore</a>
-                    </div>
-
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center space-x-2">
-                            <p class="text-xs">
-                                <strong>#codewithstein</strong><br>
-                                <span class="text-gray-500">180 posts</span>
-                            </p>
-                        </div>
-
-                        <a href="#" class="py-2 px-3 bg-purple-600 text-white text-xs rounded-lg">Explore</a>
-                    </div>
-
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center space-x-2">
-                            <p class="text-xs">
-                                <strong>#codewithstein</strong><br>
-                                <span class="text-gray-500">180 posts</span>
-                            </p>
-                        </div>
-
-                        <a href="#" class="py-2 px-3 bg-purple-600 text-white text-xs rounded-lg">Explore</a>
-                    </div>
-                </div>
-            </div>
+            <PeopleYouMayKnow/>
+            <Trends/>
         </div>
     </div>
 </template>

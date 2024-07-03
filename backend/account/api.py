@@ -1,8 +1,10 @@
 from django.http import JsonResponse
 
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
-from .forms import SignupForm
 
+from .serializers import UserSerializer, FriendRequestSerializer
+from .forms import SignupForm
+from .models import User, FriendRequest
 
 @api_view(['GET'])
 def me(request):
@@ -36,3 +38,63 @@ def signup(request):
         status = 400
         # return JsonResponse({'message': form.errors}, status=400)
     return JsonResponse({'message': message, 'errors': form.errors}, status=status)
+
+
+@api_view(['GET'])
+def friends(request, pk):
+    user = User.objects.get(pk=pk)
+    requests = []
+
+    u = request.user
+    u.friends_count = 1
+    u.save()
+
+    user.friends_count = 1
+    user.save()
+    if user == request.user:
+        requests = FriendRequest.objects.filter(created_for=request.user, status=FriendRequest.SENT)
+        requests = FriendRequestSerializer(requests, many=True)
+        requests = requests.data
+    friends = user.friends.all()
+
+    return JsonResponse({
+         'user': UserSerializer(user).data,
+         'friends': UserSerializer(friends, many=True).data,
+         'requests': requests
+    }, safe=False)
+
+@api_view(['POST'])
+def send_friend_request(request, pk):
+        # get user from database
+        user = User.objects.get(pk=pk)
+
+        user_to_you = FriendRequest.objects.filter(created_for=request.user).filter(created_by=user)
+        you_to_user = FriendRequest.objects.filter(created_for=user).filter(created_by=request.user)
+
+        if not user_to_you or not you_to_user:
+            FriendRequest.objects.create(created_for=user, created_by=request.user)
+
+            return JsonResponse({
+             'message': 'friend request created'
+            })
+        else:
+             return JsonResponse({
+             'message': 'friend request already sent'
+            })
+
+@api_view(['POST'])
+def handle_request(request, pk, status):
+     user = User.objects.get(pk=pk)
+     friend_request = FriendRequest.objects.filter(created_for=request.user).get(created_by=user)
+     friend_request.status = status
+     friend_request.save()
+
+     user.friends.add(request.user)
+     user.friends_count = user.friends_count + 1
+     user.save()
+
+     request_user = request.user
+     request_user.friends_count += 1
+     request_user.save()
+
+     return JsonResponse({'message': 'friend request updated'})

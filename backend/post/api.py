@@ -1,6 +1,6 @@
 from django.http import JsonResponse
 from .serializers import PostSerializer
-from .models import Post
+from .models import Post, Like
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from .forms import PostForm
 from account.models import User
@@ -10,7 +10,16 @@ from account.serializers import UserSerializer
 
 @api_view(['GET'])
 def post_list(request):
-    posts = Post.objects.all() # change later to feed 
+
+    user_ids = [request.user.id]
+
+    for user in request.user.friends.all():
+        #print(user.name)
+        user_ids.append(user.id)
+
+    posts = Post.objects.filter(created_by_id__in = list(user_ids)) # change later to feed 
+
+
     serializer = PostSerializer(posts, many=True)
     return JsonResponse(serializer.data, safe=False)
 
@@ -43,3 +52,17 @@ def post_create(request):
     else:
         return JsonResponse({'error':'add something here later'})
 
+@api_view(['POST'])
+def post_like(request, pk):
+    post = Post.objects.get(pk=pk)
+    if not post.likes.filter(liked_by=request.user):
+        
+        like = Like.objects.create(liked_by=request.user)
+        post = Post.objects.get(pk=pk)
+        post.likes_count += 1
+        post.likes.add(like)
+        post.save()
+
+        return JsonResponse({'message': 'Post liked'})
+    else:
+        return JsonResponse({'message': 'Post already liked'})
