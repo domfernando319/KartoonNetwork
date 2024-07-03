@@ -95,7 +95,16 @@ export default {
                 .catch(error => {
                     console.log('error', error)
                 })
+        },
+
+        logout() {
+            console.log("log out")
+            this.userStore.removeToken()
+            this.$router.push('/login')
         }
+
+
+
     }
 }
 
@@ -116,8 +125,25 @@ export default {
                     <p class="text-xs text-gray-500">120 posts</p>
                 </div>
 
-                <div class="mt-6">
-                    <button class="inline-block py-1 px-4 bg-purple-600 text-xs text-white rounded-lg" style="white-space: nowrap;" @click="sendFriendRequest">Add friend</button>
+                <div class="mt-6" >
+                    <button 
+                        class="inline-block py-1 px-4 bg-purple-600 text-xs text-white rounded-lg" 
+                        style="white-space: nowrap;" 
+                        @click="sendFriendRequest"
+                        v-if="userStore.user.id !== user.id"
+                    >
+                        Add friend
+                    </button>
+
+                    <button 
+                        class="inline-block py-1 px-4 bg-red-600 text-xs text-white rounded-lg" 
+                        style="white-space: nowrap;" 
+                        @click="logout"
+                        v-if="userStore.user.id === user.id"
+                    >
+                        Log Out
+                    </button>
+
                 </div>
             </div>
         </div>
