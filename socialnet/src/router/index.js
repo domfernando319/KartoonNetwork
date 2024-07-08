@@ -3,10 +3,11 @@ import HomeView from '../views/HomeView.vue'
 import SignUpView from '../views/SignUpView.vue'
 import LoginView from '../views/LoginView.vue'
 import FeedView from '../views/FeedView.vue'
-import MessagesView from '../views/MessagesView.vue'
 import SearchView from '../views/SearchView.vue'
 import ProfileView from '../views/ProfileView.vue'
 import FriendsView from '../views/FriendsView.vue'
+import PostView from '../views/PostView.vue'
+import ChatView from '../views/ChatView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -40,11 +41,6 @@ const router = createRouter({
       component: FeedView
     },
     {
-      path: '/messages',
-      name: 'messages',
-      component: MessagesView
-    },
-    {
       path: '/search',
       name: 'search',
       component: SearchView
@@ -59,6 +55,17 @@ const router = createRouter({
       name: 'friends',
       component: FriendsView
     },
+    {
+      path: '/:id',
+      name: 'postview',
+      component: PostView
+    },
+    {
+      path: '/chat',
+      name: 'chat',
+      component: ChatView
+    },
+    
   ]
 })
 
