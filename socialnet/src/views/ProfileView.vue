@@ -54,21 +54,6 @@ export default {
     },
 
     methods: {
-        sendDM() {
-            console.log("send dm")
-
-            axios   
-                .get(`/api/chat/${this.$route.params.id}/get-or-create/`)
-                .then(res => {
-                    console.log(res.data)
-
-                    this.$router.push('/chat')
-                })
-                .catch(err => {
-                    console.log(err)
-                })
-        },
-
         getFeed() {
            axios
             .get(`/api/posts/profile/${this.$route.params.id}/`)
@@ -140,23 +125,14 @@ export default {
                     <p class="text-xs text-gray-500">120 posts</p>
                 </div>
 
-                <div class="mt-6 flex flex-col items-center space-y-4" >
+                <div class="mt-6" >
                     <button 
                         class="inline-block py-1 px-4 bg-purple-600 text-xs text-white rounded-lg" 
                         style="white-space: nowrap;" 
                         @click="sendFriendRequest"
                         v-if="userStore.user.id !== user.id"
                     >
-                        Add Friend
-                    </button>
-
-                    <button 
-                        class="inline-block py-1 px-4 bg-purple-600 text-xs text-white rounded-lg" 
-                        style="white-space: nowrap;" 
-                        @click="sendDM"
-                        v-if="userStore.user.id !== user.id"
-                    >
-                        Send Message
+                        Add friend
                     </button>
 
                     <button 
