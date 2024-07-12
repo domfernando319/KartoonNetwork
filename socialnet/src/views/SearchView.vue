@@ -3,6 +3,7 @@ import axios from 'axios';
 import PeopleYouMayKnow from '@/components/PeopleYouMayKnow.vue';
 import Trends from '@/components/Trends.vue';
 import FeedItem from '@/components/FeedItem.vue';
+import { useRoute } from 'vue-router';
 export default {
     name: "SearchView",
     components: { PeopleYouMayKnow, Trends, FeedItem },
@@ -48,22 +49,24 @@ export default {
                     </button>
                 </form>
             </div>
+            
+            <div class="p-4 bg-white border border-gray-200 rounded-lg grid grid-cols-3 gap-6 min-w-[500px]" v-if="users.length">
+                <template v-for="user in users" :key="user.id">
+                    <div class="p-4 text-center bg-gray-100 rounded-lg min-w-[130px]">
+                        <img src="https://i.pravatar.cc/300?img=70" class="mb-6 rounded-full">
+                    
+                        <p class="mt-6">
+                            <strong>
+                                <RouterLink :to="{ name: 'profile', params: { 'id': user.id } }">{{ user.name }}</RouterLink>
+                            </strong>
+                        </p>
 
-            <div class="p-4 bg-white border border-gray-200 rounded-lg grid grid-cols-4 gap-4" v-if="users.length">
-                <div class="p-4 text-center bg-gray-100 rounded-lg" v-for="user in users">
-                    <img src="https://i.pravatar.cc/300?img=70" class="mb-6 rounded-full">
-                
-                    <p>
-                        <strong>
-                            <RouterLink :to="{name: 'profile', params:{'id': user.id}}">{{ user.name }}</RouterLink>
-                        </strong>
-                    </p>
-
-                    <div class="mt-6 flex space-x-8 justify-around">
-                        <p class="text-xs text-gray-500">{{user.friends_count}} friends</p>
-                        <p class="text-xs text-gray-500">120 posts</p>
+                        <div class="mt-6 hidden sm:flex sm:justify-around">
+                            <p class="text-xs text-gray-500">{{ user.friends_count }} friends</p>
+                            <p class="text-xs text-gray-500">{{ user.post_count }} posts</p>
+                        </div>
                     </div>
-                </div>
+                </template>
             </div>
 
             <div 

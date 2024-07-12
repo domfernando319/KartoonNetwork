@@ -135,9 +135,9 @@ export default {
 
                 <img src="https://i.pravatar.cc/300?img=70" class="mb-6 rounded-full">
                 <p><strong>{{user.name}}</strong></p>
-                <div class="mt-6 flex space-x-8 justify-around">
+                <div class="mt-6 flex space-x-8 justify-around" v-if="user.id">
                     <RouterLink :to="{name: 'friends', params: {id: user.id}}" class="text-xs text-gray-500">{{user.friends_count}} friends</RouterLink>
-                    <p class="text-xs text-gray-500">120 posts</p>
+                    <p class="text-xs text-gray-500">{{user.post_count}} posts</p>
                 </div>
 
                 <div class="mt-6 flex flex-col items-center space-y-4" >

@@ -75,7 +75,7 @@ export default (await import('vue')).defineComponent ({
 
                 <div class="mt-6 flex space-x-8 justify-around">
                     <p class="text-xs text-gray-500">{{user.friends_count}} friends</p>
-                    <p class="text-xs text-gray-500">120 posts</p>
+                    <p class="text-xs text-gray-500">{{ user.post_count }} posts</p>
                 </div>
             </div>
         </div>
@@ -96,7 +96,7 @@ export default (await import('vue')).defineComponent ({
 
                     <div class="mt-6 flex space-x-8 justify-around">
                         <p class="text-xs text-gray-500">{{user.friends_count}} friends</p>
-                        <p class="text-xs text-gray-500">120 posts</p>
+                        <p class="text-xs text-gray-500">{{ user.post_count }} posts</p>
                     </div>
                     <div class="mt-6 space-x-4">
                         <button class="inline-block py-4 px-6 bg-purple-600 text-white rounded-lg" @click="handleRequest('accepted', request.created_by.id)">Accept</button>
@@ -126,7 +126,7 @@ export default (await import('vue')).defineComponent ({
 
                     <div class="mt-6 flex space-x-8 justify-around">
                         <p class="text-xs text-gray-500">{{ user.friends_count }} friends</p>
-                        <p class="text-xs text-gray-500">120 posts</p>
+                        <p class="text-xs text-gray-500">{{ user.post_count }} posts</p>
                     </div>
                 </div>
             </div>
