@@ -159,6 +159,14 @@ export default {
                         Send Message
                     </button>
 
+                    <RouterLink 
+                        class="inline-block py-1 px-4 bg-blue-600 text-xs text-white rounded-lg" 
+                        to="/profile/edit"
+                        v-if="userStore.user.id === user.id"
+                    >
+                        Edit Profile
+                    </RouterLink>
+
                     <button 
                         class="inline-block py-1 px-4 bg-red-600 text-xs text-white rounded-lg" 
                         style="white-space: nowrap;" 

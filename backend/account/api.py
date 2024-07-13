@@ -39,6 +39,20 @@ def signup(request):
         # return JsonResponse({'message': form.errors}, status=400)
     return JsonResponse({'message': message, 'errors': form.errors}, status=status)
 
+@api_view(['POST'])
+def editprofile(request):
+    user = request.user
+    email = email=request.data.get('email')
+    if User.objects.exclude(id=user.id).filter(email=email).exists():
+        return JsonResponse({'message': 'email already exists'})
+    else:
+        user.email = email
+        user.name = request.data.get('name')
+        user.save()
+        return JsonResponse({'message': 'Information updated.'})
+
+
+
 
 @api_view(['GET'])
 def friends(request, pk):
