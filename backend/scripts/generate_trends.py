@@ -23,8 +23,8 @@ for trend in Trend.objects.all():
 trends = []
 
 this_hour = timezone.now().replace(minute=0, second=0, microsecond=0)
-twenty_four_hours = this_hour - timedelta(hours=24)
-for post in Post.objects.filter(created_at__gte=twenty_four_hours)):
+twenty_four_hours = this_hour - timedelta(hours=48)
+for post in Post.objects.filter(created_at__gte=twenty_four_hours):
     #find hastag in string
     extract_hastags(post.body, trends)
 
