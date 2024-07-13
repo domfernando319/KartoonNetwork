@@ -1,6 +1,6 @@
 <template>
 <div class="max-w-7xl mx-auto grid grid-cols-4 gap-4">
-        <div class="main-left col-span-1">
+        <!-- <div class="main-left col-span-1">
             <div class="p-4 bg-white border border-gray-200 text-center rounded-lg">
                 <div class="space-y-4">
 
@@ -10,22 +10,54 @@
                         v-bind:key="conversation.id"
                         v-on:click="setActiveConversation(conversation.id)"
                     >
-                        <div class="flex items-center space-x-2">
-                            <img src="https://i.pravatar.cc/300?img=70" class="w-[40px] rounded-full">
-                            
-                            <template class="text-xs font-bold" 
+                        <div class="flex items-center space-x-1">                           
+                            <template 
                                 v-for="user in conversation.users"
                                 v-bind:key="user.id" 
                             >
-                                <strong v-if="user.id !== userStore.user.id">{{ user.name }}</strong>
+                                <img :src="user.get_avatar" class="w-[40px] h-[40px] rounded-full" >
+                                <p
+                                    class="text-xs font-bold" 
+                                    v-if="user.id !== userStore.user.id"
+                                >
+                                    {{ user.name }}
+                                </p>
+                            </template>
+                        </div>
+                        <span class="text-xs text-gray-500">{{ conversation.modified_at_formatted }} ago </span>
+
+                    </div>
+                </div>
+            </div>
+        </div> -->
+        <div class="main-left col-span-1">
+            <div class="p-4 bg-white border border-gray-200 rounded-lg">
+                <div class="space-y-2">
+                    <div 
+                        class="flex items-center justify-between"
+                        v-for="conversation in conversations"
+                        v-bind:key="conversation.id"
+                        v-on:click="setActiveConversation(conversation.id)"
+                    >
+                        <div class="flex items-center space-x-2">
+                            <template
+                                v-for="user in conversation.users"
+                                v-bind:key="user.id"
+                            >
+                                
+                                <p 
+                                    class="text-xs font-bold"
+                                    v-if="user.id !== userStore.user.id"
+                                >
+                                    <img :src="user.get_avatar" class="rounded-full" :style="{ width: '50px', height: '50px', objectFit: 'cover', borderRadius: '50%' }">
+
+                                    {{ user.name }}
+                                </p>
                             </template>
                         </div>
 
-                        <span class="text-xs text-gray-500">{{ conversation.modified_at_formatted }} ago </span>
+                        <span class="text-xs text-gray-500">{{ conversation.modified_at_formatted }} ago</span>
                     </div>
-
-                    
-
                 </div>
             </div>
         </div>
@@ -48,7 +80,7 @@
                                 <span class="text-xs text-gray-500 leading-none">{{ message.created_at_formatted }} ago</span>
                             </div>
                             <div class="flex-shrink-0 h-10 w-10 rounded-full bg-gray-300">
-                                <img src="https://i.pravatar.cc/300?img=70" class="w-[40px] rounded-full">
+                                <img :src="message.created_by.get_avatar" class="rounded-full" :style="{ width: '40px', height: '40px', objectFit: 'cover', borderRadius: '50%' }">
                             </div>
                         </div>
 
@@ -56,7 +88,7 @@
                             v-else
                         >
                             <div class="flex-shrink-0 h-10 w-10 rounded-full bg-gray-300">
-                                <img src="https://i.pravatar.cc/300?img=70" class="w-[40px] rounded-full">
+                                <img :src="message.created_by.get_avatar" class="rounded-full" :style="{ width: '40px', height: '40px', objectFit: 'cover', borderRadius: '50%' }">
                             </div>
                             <div>
                                 <div class="bg-gray-300 p-3 rounded-r-lg rounded-bl-lg">

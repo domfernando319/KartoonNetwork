@@ -5,7 +5,7 @@ import HelloWorld from './components/HelloWorld.vue'
 <script>
     
     import Toast from '@/components/Toast.vue'
-    import { useUserStore } from './stores/user';
+    import { useUserStore } from '@/stores/user';
     import axios from 'axios';
 
     export default {
@@ -70,8 +70,8 @@ import HelloWorld from './components/HelloWorld.vue'
                 <div class="menu-right">
                     <template v-if="userStore.user.isAuthenticated">
                         <!-- Using ROuter LInk to create link with dynamic parameters -->
-                        <RouterLink :to="{name: 'profile', params:{'id': userStore.user.id}}">
-                            <img src="https://i.pravatar.cc/40?img=70" class="rounded-full">
+                        <RouterLink v-if="userStore.user.id" :to="{name: 'profile', params:{'id': userStore.user.id}}">
+                            <img :src="userStore.user.avatar" class="rounded-full" :style="{ width: '80px', height: '80px', objectFit: 'cover', borderRadius: '50%' }">
                         </RouterLink>                        
                     </template>
                     <template v-else>

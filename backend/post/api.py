@@ -1,6 +1,6 @@
 from django.http import JsonResponse
-from .serializers import CommentSerializer, PostSerializer, PostDetailSerializer
-from .models import Post, Like, Comment
+from .serializers import CommentSerializer, PostSerializer, PostDetailSerializer, TrendSerializer
+from .models import Post, Like, Comment, Trend
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from .forms import PostForm
 from account.models import User
@@ -18,6 +18,11 @@ def post_list(request):
         user_ids.append(user.id)
 
     posts = Post.objects.filter(created_by_id__in = list(user_ids)) # change later to feed 
+
+    trend = request.GET.get('trend', '')
+
+    if trend:
+        posts = posts.filter(body__icontains='#' + trend)
 
 
     serializer = PostSerializer(posts, many=True)
@@ -87,4 +92,12 @@ def post_create_comment(request, pk):
     serializer = CommentSerializer(comment)
 
     return JsonResponse(serializer.data, safe=False)
-    
+
+
+@api_view(['GET'])
+def get_trends(request):
+    trends = Trend.objects.all()
+    serializer = TrendSerializer(trends, many=True)
+
+    return JsonResponse(serializer.data, safe=False)
+

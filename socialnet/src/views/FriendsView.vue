@@ -69,13 +69,13 @@ export default (await import('vue')).defineComponent ({
 
         <div class="main-left col-span-1">
             <div class="p-4 bg-white border border-gray-200 text-center rounded-lg">
-                <img src="https://i.pravatar.cc/300?img=70" class="mb-6 rounded-full">
+                <img :src="user.get_avatar"  class="mb-6 rounded-full">
                 
                 <p><strong>{{user.name}}</strong></p>
 
                 <div class="mt-6 flex space-x-8 justify-around">
                     <p class="text-xs text-gray-500">{{user.friends_count}} friends</p>
-                    <p class="text-xs text-gray-500">120 posts</p>
+                    <p class="text-xs text-gray-500">{{ user.post_count }} posts</p>
                 </div>
             </div>
         </div>
@@ -86,7 +86,7 @@ export default (await import('vue')).defineComponent ({
 
                 <h2 class ="text-xl mb-6">Friend Requests</h2>
                 <div class="p-4 text-center bg-gray-100 rounded-lg" v-for="request in friendRequests">
-                    <img src="https://i.pravatar.cc/100?img=70" class="mb-6 mx-auto rounded-full">
+                    <img :src="request.created_by.get_avatar"  class="mb-6 mx-auto rounded-full">
                 
                     <p>
                         <strong>
@@ -96,7 +96,7 @@ export default (await import('vue')).defineComponent ({
 
                     <div class="mt-6 flex space-x-8 justify-around">
                         <p class="text-xs text-gray-500">{{user.friends_count}} friends</p>
-                        <p class="text-xs text-gray-500">120 posts</p>
+                        <p class="text-xs text-gray-500">{{ user.post_count }} posts</p>
                     </div>
                     <div class="mt-6 space-x-4">
                         <button class="inline-block py-4 px-6 bg-purple-600 text-white rounded-lg" @click="handleRequest('accepted', request.created_by.id)">Accept</button>
@@ -116,7 +116,7 @@ export default (await import('vue')).defineComponent ({
                     v-for="user in friends"
                     v-bind:key="user.id"
                 >
-                    <img src="https://i.pravatar.cc/300?img=70" class="mb-6 rounded-full">
+                    <img :src="user.get_avatar"  class="mb-6 rounded-full">
                 
                     <p>
                         <strong>
@@ -126,7 +126,7 @@ export default (await import('vue')).defineComponent ({
 
                     <div class="mt-6 flex space-x-8 justify-around">
                         <p class="text-xs text-gray-500">{{ user.friends_count }} friends</p>
-                        <p class="text-xs text-gray-500">120 posts</p>
+                        <p class="text-xs text-gray-500">{{ user.post_count }} posts</p>
                     </div>
                 </div>
             </div>

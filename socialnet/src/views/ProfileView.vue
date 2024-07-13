@@ -131,13 +131,13 @@ export default {
     <div class="max-w-7xl mx-auto grid grid-cols-4 gap-4">
 
         <div class="main-left col-span-1">
-            <div v-if="user" class="p-4 bg-white border border-gray-200 text-center rounded-lg">
+            <div class="p-4 bg-white border border-gray-200 text-center rounded-lg">
 
-                <img src="https://i.pravatar.cc/300?img=70" class="mb-6 rounded-full">
+                <img :src="user.get_avatar" class="mb-6 rounded-full">
                 <p><strong>{{user.name}}</strong></p>
-                <div class="mt-6 flex space-x-8 justify-around">
+                <div class="mt-6 flex space-x-8 justify-around" v-if="user.id">
                     <RouterLink :to="{name: 'friends', params: {id: user.id}}" class="text-xs text-gray-500">{{user.friends_count}} friends</RouterLink>
-                    <p class="text-xs text-gray-500">120 posts</p>
+                    <p class="text-xs text-gray-500">{{user.post_count}} posts</p>
                 </div>
 
                 <div class="mt-6 flex flex-col items-center space-y-4" >
@@ -158,6 +158,14 @@ export default {
                     >
                         Send Message
                     </button>
+
+                    <RouterLink 
+                        class="inline-block py-1 px-4 bg-blue-600 text-xs text-white rounded-lg" 
+                        to="/profile/edit"
+                        v-if="userStore.user.id === user.id"
+                    >
+                        Edit Profile
+                    </RouterLink>
 
                     <button 
                         class="inline-block py-1 px-4 bg-red-600 text-xs text-white rounded-lg" 

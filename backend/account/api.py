@@ -3,7 +3,7 @@ from django.http import JsonResponse
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 
 from .serializers import UserSerializer, FriendRequestSerializer
-from .forms import SignupForm
+from .forms import SignupForm, ProfileForm
 from .models import User, FriendRequest
 
 @api_view(['GET'])
@@ -12,7 +12,10 @@ def me(request):
              'id': request.user.id, 
              'name': request.user.name,
              'email': request.user.email,
+             'avatar': request.user.get_avatar()
         })
+
+
 
 @api_view(['POST'])
 @authentication_classes([])
@@ -40,6 +43,26 @@ def signup(request):
     return JsonResponse({'message': message, 'errors': form.errors}, status=status)
 
 
+
+
+@api_view(['POST'])
+def editprofile(request):
+    user = request.user
+    email = request.data.get('email')
+    if User.objects.exclude(id=user.id).filter(email=email).exists():
+        return JsonResponse({'message': 'email already exists'})
+    else:
+        print(request.POST)
+        print(request.FILES)
+        form = ProfileForm(request.POST, request.FILES, instance=user)
+        if form.is_valid():
+            form.save()
+
+        return JsonResponse({'message': 'Information updated.'})
+
+
+
+
 @api_view(['GET'])
 def friends(request, pk):
     user = User.objects.get(pk=pk)
@@ -63,6 +86,9 @@ def friends(request, pk):
          'requests': requests
     }, safe=False)
 
+
+
+
 @api_view(['POST'])
 def send_friend_request(request, pk):
         # get user from database
@@ -81,6 +107,9 @@ def send_friend_request(request, pk):
              return JsonResponse({
              'message': 'friend request already sent'
             })
+
+
+
 
 @api_view(['POST'])
 def handle_request(request, pk, status):
