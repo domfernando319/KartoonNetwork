@@ -23,6 +23,11 @@
 								<input type="email" v-model="form.email" placeholder="Your e-mail address" class="w-full mt-2 py-4 px-6 border border-gray-200 rounded-lg">
 						</div>
 
+                        <div>
+								<label>Avatar</label><br>
+								<input type="file" ref="file">
+						</div>
+
 						<template v-if="errors.length > 0">
 							<div class="bg-red-300 text-white rounded-lg p-6">
 								<p v-for="error in errors" v-bind:key="error">
@@ -62,7 +67,7 @@
                 form: {
                     email: this.userStore.user.email,
                     name: this.userStore.user.name,
-
+                    
                 },
 
                 errors: [],
@@ -79,7 +84,17 @@
                     this.errors.push('Your email is missing')
                 }
                 if (this.errors.length === 0) {
-                    axios.post('/api/editprofile/', this.form)
+                    let formData = new FormData()
+                    formData.append('avatar', this.$refs.file.files[0])
+                    formData.append('name', this.form.name)
+                    formData.append('email', this.form.email)
+
+
+                    axios.post('/api/editprofile/', formData, {
+                        headers: {
+                            "Content-Type": "multipart/form-data",
+                        }
+                    })
                         .then( response => {
                             if (response.data.message === 'Information updated.') {
                                 this.toastStore.showToast(5000, 'Changes saved.', 'bg-emerald-500')

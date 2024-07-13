@@ -53,7 +53,7 @@ export default {
             <div class="p-4 bg-white border border-gray-200 rounded-lg grid grid-cols-3 gap-6 min-w-[500px]" v-if="users.length">
                 <template v-for="user in users" :key="user.id">
                     <div class="p-4 text-center bg-gray-100 rounded-lg min-w-[130px]">
-                        <img src="https://i.pravatar.cc/300?img=70" class="mb-6 rounded-full">
+                        <img :src="user.get_avatar"  class="mb-6 rounded-full">
                     
                         <p class="mt-6">
                             <strong>

@@ -1,7 +1,7 @@
 <template>
     <div class="mb-6 flex items-center justify-between">
         <div class="flex items-center space-x-6">
-            <!-- <img src="https://i.pravatar.cc/300?img=70" class="w-[40px] rounded-full"> -->
+            <img :src="comment.created_by.get_avatar" class=" rounded-full" :style="{ width: '40px', height: '40px', objectFit: 'cover', borderRadius: '50%' }">
             
             <p>
                 <strong>
@@ -29,6 +29,7 @@ export default (await import('vue')).defineComponent({
 
     methods: {
         
-    }
+    },
+    components: { RouterLink }
 })
 </script>

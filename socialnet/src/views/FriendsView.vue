@@ -69,7 +69,7 @@ export default (await import('vue')).defineComponent ({
 
         <div class="main-left col-span-1">
             <div class="p-4 bg-white border border-gray-200 text-center rounded-lg">
-                <img src="https://i.pravatar.cc/300?img=70" class="mb-6 rounded-full">
+                <img :src="user.get_avatar"  class="mb-6 rounded-full">
                 
                 <p><strong>{{user.name}}</strong></p>
 
@@ -86,7 +86,7 @@ export default (await import('vue')).defineComponent ({
 
                 <h2 class ="text-xl mb-6">Friend Requests</h2>
                 <div class="p-4 text-center bg-gray-100 rounded-lg" v-for="request in friendRequests">
-                    <img src="https://i.pravatar.cc/100?img=70" class="mb-6 mx-auto rounded-full">
+                    <img :src="request.created_by.get_avatar"  class="mb-6 mx-auto rounded-full">
                 
                     <p>
                         <strong>
@@ -116,7 +116,7 @@ export default (await import('vue')).defineComponent ({
                     v-for="user in friends"
                     v-bind:key="user.id"
                 >
-                    <img src="https://i.pravatar.cc/300?img=70" class="mb-6 rounded-full">
+                    <img :src="user.get_avatar"  class="mb-6 rounded-full">
                 
                     <p>
                         <strong>
