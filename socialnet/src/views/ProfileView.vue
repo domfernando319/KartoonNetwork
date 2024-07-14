@@ -33,6 +33,7 @@ export default {
                 id: null
             },
             body: '',
+            url: '',
 
         }
     },
@@ -54,6 +55,11 @@ export default {
     },
 
     methods: {
+        onFileChange(e) {
+            const file = e.target.files[0]
+            this.url = URL.createObjectURL(file)
+        },
+
         sendDM() {
             console.log("send dm")
 
@@ -97,6 +103,8 @@ export default {
                     console.log('data', response.data)
                     this.posts.unshift(response.data)
                     this.body = ''
+                    this.$refs.file.value = null
+                    this.url = null
                     this.user.post_count += 1
                 })
                 .catch(error => {
@@ -194,12 +202,23 @@ export default {
                 <form v-on:submit.prevent="submitForm" method="post">
                     <div class="p-4">  
                         <textarea v-model="body" class="p-4 w-full bg-gray-100 rounded-lg" placeholder="What are you thinking about?"></textarea>
+                        <div id="preview" v-if="url">
+                            <img :src="url" class="w-[150px] mt-3 rounded-xl"/>
+
+
+                        </div>
                     </div>
+
+
     
                     <div class="p-4 border-t border-gray-100 flex justify-between">
-                        <a href="#" class="inline-block py-4 px-6 bg-gray-600 text-white rounded-lg">Attach image</a>
-                        <input type="file" ref="file">
+                        
+                        <label class="custom-file-upload inline-block py-4 px-6 bg-gray-600 text-white rounded-lg">
+                            <input type="file" ref="file" @change="onFileChange">
+                            Attach Image
+                        </label>
                         <button class="inline-block py-4 px-6 bg-purple-600 text-white rounded-lg">Post</button>
+                    
                     </div>
                 </form>
             </div>
@@ -224,3 +243,17 @@ export default {
         </div>
     </div>
 </template>
+
+<style>
+    input[type='file'] {
+        display: none;
+    }
+
+    .custom-file-upload {
+        border: 1px solid #ccc;
+        display: inline-block;
+        padding: 14px 12px;
+        cursor: pointer;
+
+    }
+</style>
