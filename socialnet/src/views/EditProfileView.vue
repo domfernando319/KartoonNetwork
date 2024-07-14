@@ -6,8 +6,10 @@
 					<h1 class="mb-6 text-2xl">Edit Profile</h1>
 
 					<p class="mb-6 text-gray-500">
-							Lorem ipsum dolor sit, amet consectetur adipisicing elit. Atque officia laboriosam excepturi harum qui quo iste, tempora nesciunt, maiores velit officiis sequi fuga neque eveniet praesentium sint provident suscipit minima.
+							Lorem ipsum dolor sit, amet consectetur.
 					</p>
+
+                    <RouterLink to="/profile/edit/password" class="underline">Change Password</RouterLink>
 				</div>
 		</div>
 
