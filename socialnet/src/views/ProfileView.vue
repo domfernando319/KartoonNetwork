@@ -90,6 +90,8 @@ export default {
                 .then(response => {
                     console.log('data', response.data)
                     this.posts.unshift(response.data)
+                    this.body = ''
+                    this.user.post_count += 1
                 })
                 .catch(error => {
                     console.log('error', error)

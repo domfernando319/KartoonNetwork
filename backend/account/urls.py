@@ -8,6 +8,7 @@ urlpatterns = [
     path('login/', TokenObtainPairView.as_view(), name='token_obtain'),
     path('refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('editprofile/', api.editprofile, name='editprofile'),
+    path('changepassword/', api.changepassword, name='changepassword'),
     path('friends/<uuid:pk>/', api.friends, name="friends"), #this is how you see friends
     path('friends/<uuid:pk>/request/', api.send_friend_request, name='send_friend_request'),  # this is how you send friend request
     path('friends/<uuid:pk>/<str:status>/', api.handle_request, name='handle_request')
