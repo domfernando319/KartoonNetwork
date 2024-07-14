@@ -1,4 +1,5 @@
 from django.http import JsonResponse
+from django.core.mail import send_mail
 from django.contrib.auth.forms import PasswordChangeForm
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 
@@ -32,8 +33,17 @@ def signup(request):
     })
 
     if form.is_valid():
-        form.save()
-        # send email verification later
+        user = form.save()
+        user.is_active = False
+        user.save()
+        url = f'http://127.0.0.1.8000/activateaccount/?email={user.email}&id={user.id}'
+        send_mail(
+            "Verify Account Registration",
+            f"Click this link to activate your account: {url}",
+            "noreply@gmail.com",
+            [user.email],
+            fail_silently=False,
+        )
     else:
         message = form.errors.as_json()
         # return JsonResponse({'message': form.errors}, status=400)

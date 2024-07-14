@@ -46,9 +46,9 @@ export default {
 				axios.post('/api/signup/', this.form)
 					.then( response => {
 						if (response.data.message === 'success') {
-                            this.toastStore.showToast(5000, 'The user is registered. Please log in', 'bg-emerald-500')
+                            this.toastStore.showToast(5000, 'The user is registered. ', 'bg-emerald-500')
 							setTimeout(function() {
-								alert('The user is registered. Please log in')
+								alert('The user is registered. Please activate your account via email.')
 							}, 500);
 
                             this.form.email = ''

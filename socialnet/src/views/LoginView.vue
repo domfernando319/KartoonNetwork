@@ -37,7 +37,7 @@ export default {
 					})
 					.catch(err => {
 						console.log('Error!!: ', err)
-						this.errors.push('The email or password is incorrect!')
+						this.errors.push('Your credentials are incorrect! Or the user has not been activated yet.')
 					})
 			}
 			if (this.errors.length === 0) {	
