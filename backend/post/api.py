@@ -2,7 +2,7 @@ from django.http import JsonResponse
 from .serializers import CommentSerializer, PostSerializer, PostDetailSerializer, TrendSerializer
 from .models import Post, Like, Comment, Trend
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
-from .forms import PostForm
+from .forms import PostForm, AttachmentForm
 from account.models import User
 from account.serializers import UserSerializer
 
@@ -55,12 +55,24 @@ def post_list_profile(request, id): #id will be own user id or id of user youre 
 @api_view(['POST'])
 def post_create(request):
 
-    form = PostForm(request.data)
+    form = PostForm(request.POST)
+    attachment_form = AttachmentForm(request.POST, request.FILES)
+
+    if attachment_form.is_valid():
+        attachment = attachment_form.save(commit=False)
+        attachment.created_by = request.user
+        attachment.save()
+
+    
     if form.is_valid():
         post = form.save(commit=False)
         post.created_by = request.user
+
+
         post.save()
 
+        if attachment:
+            post.attachments.add(attachment)
         user = request.user
         user.post_count += 1
         user.save()
@@ -104,4 +116,5 @@ def get_trends(request):
     serializer = TrendSerializer(trends, many=True)
 
     return JsonResponse(serializer.data, safe=False)
+
 

@@ -83,9 +83,15 @@ export default {
         },
         submitForm() {
             console.log('submitForm', this.body)
+            let formData = new FormData()
+            formData.append('image', this.$refs.file.files[0])
+            formData.append('body', this.body)
+
             axios
-                .post('/api/posts/create/', {
-                    'body': this.body
+                .post('/api/posts/create/', formData, {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    }
                 })
                 .then(response => {
                     console.log('data', response.data)
@@ -192,7 +198,7 @@ export default {
     
                     <div class="p-4 border-t border-gray-100 flex justify-between">
                         <a href="#" class="inline-block py-4 px-6 bg-gray-600 text-white rounded-lg">Attach image</a>
-    
+                        <input type="file" ref="file">
                         <button class="inline-block py-4 px-6 bg-purple-600 text-white rounded-lg">Post</button>
                     </div>
                 </form>
