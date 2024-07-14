@@ -47,13 +47,25 @@ export default {
 					.then( response => {
 						if (response.data.message === 'success') {
                             this.toastStore.showToast(5000, 'The user is registered. Please log in', 'bg-emerald-500')
+							setTimeout(function() {
+								alert('The user is registered. Please log in')
+							}, 500);
 
                             this.form.email = ''
                             this.form.name = ''
                             this.form.password1 = ''
                             this.form.password2 = ''
                         } else {
-							console.log(response.data.errors)
+							const data = JSON.parse(response.data.message)
+							for (const key in data) {
+								this.errors.push(data[key][0].message)
+							}
+
+							setTimeout(function() {
+								alert('Something went wrong. Please try again.')
+							
+							}, 500);
+
                             this.toastStore.showToast(5000, 'Something went wrong. Please try again', 'bg-red-300')
                         }
 					})

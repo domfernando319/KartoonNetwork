@@ -4,9 +4,8 @@ import { useUserStore } from '../stores/user';
 export default {
 	setup() {
 		const userStore = useUserStore()
-
 		return {
-			userStore
+			userStore,
 		}
 	},
 	data() {
@@ -38,8 +37,10 @@ export default {
 					})
 					.catch(err => {
 						console.log('Error!!: ', err)
+						this.errors.push('The email or password is incorrect!')
 					})
-				
+			}
+			if (this.errors.length === 0) {	
 				await axios.get('/api/me/')
 					.then(res => {
 						this.userStore.setUserInfo(res.data)

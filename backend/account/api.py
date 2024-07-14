@@ -33,14 +33,11 @@ def signup(request):
 
     if form.is_valid():
         form.save()
-        status = 200
         # send email verification later
     else:
-        message = 'errorrrs'
-        print(form.errors)
-        status = 400
+        message = form.errors.as_json()
         # return JsonResponse({'message': form.errors}, status=400)
-    return JsonResponse({'message': message, 'errors': form.errors}, status=status)
+    return JsonResponse({'message': message}, safe=False)
 
 
 
