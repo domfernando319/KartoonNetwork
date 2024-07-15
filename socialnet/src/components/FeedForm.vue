@@ -17,7 +17,7 @@
                 <input type="file" ref="file" @change="onFileChange">
                 Attach Image
             </label>
-            <button class="inline-block py-4 px-6 bg-purple-600 text-white rounded-lg">Post</button>
+            <button class="inline-block py-4 px-6 bg-blue-600 text-white rounded-lg">Post</button>
         
         </div>
     </form>

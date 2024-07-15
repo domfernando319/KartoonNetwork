@@ -146,7 +146,7 @@ export default {
 
                 <div class="mt-6 flex flex-col items-center space-y-4" >
                     <button 
-                        class="inline-block py-1 px-4 bg-purple-600 text-xs text-white rounded-lg" 
+                        class="inline-block py-1 px-4 bg-blue-600 text-xs text-white rounded-lg" 
                         style="white-space: nowrap;" 
                         @click="sendFriendRequest"
                         v-if="userStore.user.id !== user.id && can_send_friend_request"
@@ -155,7 +155,7 @@ export default {
                     </button>
 
                     <button 
-                        class="inline-block py-1 px-4 bg-purple-600 text-xs text-white rounded-lg" 
+                        class="inline-block py-1 px-4 bg-blue-600 text-xs text-white rounded-lg" 
                         style="white-space: nowrap;" 
                         @click="sendDM"
                         v-if="userStore.user.id !== user.id"

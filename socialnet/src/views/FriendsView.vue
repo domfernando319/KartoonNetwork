@@ -99,7 +99,7 @@ export default (await import('vue')).defineComponent ({
                         <p class="text-xs text-gray-500">{{ user.post_count }} posts</p>
                     </div>
                     <div class="mt-6 space-x-4">
-                        <button class="inline-block py-4 px-6 bg-purple-600 text-white rounded-lg" @click="handleRequest('accepted', request.created_by.id)">Accept</button>
+                        <button class="inline-block py-4 px-6 bg-blue-600 text-white rounded-lg" @click="handleRequest('accepted', request.created_by.id)">Accept</button>
                         <button class="inline-block py-4 px-6 bg-red-600 text-white rounded-lg" @click="handleRequest('rejected', request.created_by.id)">Reject</button>
                     </div>
                 </div>

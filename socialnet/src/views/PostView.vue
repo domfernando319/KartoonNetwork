@@ -95,7 +95,7 @@ export default {
                     </div>
     
                     <div class="p-4 border-t border-gray-100">
-                        <button class="inline-block py-4 px-6 bg-purple-600 text-white rounded-lg">Comment</button>
+                        <button class="inline-block py-4 px-6 bg-blue-600 text-white rounded-lg">Comment</button>
                     </div>
                 </form>
             </div>
@@ -113,7 +113,7 @@ export default {
                             <p class="text-xs"><strong>Code With Stein</strong></p>
                         </div>
 
-                        <a href="#" class="py-2 px-3 bg-purple-600 text-white text-xs rounded-lg">Show</a>
+                        <a href="#" class="py-2 px-3 bg-blue-600 text-white text-xs rounded-lg">Show</a>
                     </div>
 
                     <div class="flex items-center justify-between">
@@ -123,7 +123,7 @@ export default {
                             <p class="text-xs"><strong>Code With Stein</strong></p>
                         </div>
 
-                        <a href="#" class="py-2 px-3 bg-purple-600 text-white text-xs rounded-lg">Show</a>
+                        <a href="#" class="py-2 px-3 bg-blue-600 text-white text-xs rounded-lg">Show</a>
                     </div>
 
                     <div class="flex items-center justify-between">
@@ -133,7 +133,7 @@ export default {
                             <p class="text-xs"><strong>Code With Stein</strong></p>
                         </div>
 
-                        <a href="#" class="py-2 px-3 bg-purple-600 text-white text-xs rounded-lg">Show</a>
+                        <a href="#" class="py-2 px-3 bg-blue-600 text-white text-xs rounded-lg">Show</a>
                     </div>
                 </div>
             </div>
@@ -150,7 +150,7 @@ export default {
                             </p>
                         </div>
 
-                        <a href="#" class="py-2 px-3 bg-purple-600 text-white text-xs rounded-lg">Explore</a>
+                        <a href="#" class="py-2 px-3 bg-blue-600 text-white text-xs rounded-lg">Explore</a>
                     </div>
 
                     <div class="flex items-center justify-between">
@@ -161,7 +161,7 @@ export default {
                             </p>
                         </div>
 
-                        <a href="#" class="py-2 px-3 bg-purple-600 text-white text-xs rounded-lg">Explore</a>
+                        <a href="#" class="py-2 px-3 bg-blue-600 text-white text-xs rounded-lg">Explore</a>
                     </div>
 
                     <div class="flex items-center justify-between">
@@ -172,7 +172,7 @@ export default {
                             </p>
                         </div>
 
-                        <a href="#" class="py-2 px-3 bg-purple-600 text-white text-xs rounded-lg">Explore</a>
+                        <a href="#" class="py-2 px-3 bg-blue-600 text-white text-xs rounded-lg">Explore</a>
                     </div>
 
                     <div class="flex items-center justify-between">
@@ -183,7 +183,7 @@ export default {
                             </p>
                         </div>
 
-                        <a href="#" class="py-2 px-3 bg-purple-600 text-white text-xs rounded-lg">Explore</a>
+                        <a href="#" class="py-2 px-3 bg-blue-600 text-white text-xs rounded-lg">Explore</a>
                     </div>
 
                     <div class="flex items-center justify-between">
@@ -194,7 +194,7 @@ export default {
                             </p>
                         </div>
 
-                        <a href="#" class="py-2 px-3 bg-purple-600 text-white text-xs rounded-lg">Explore</a>
+                        <a href="#" class="py-2 px-3 bg-blue-600 text-white text-xs rounded-lg">Explore</a>
                     </div>
                 </div>
             </div>
