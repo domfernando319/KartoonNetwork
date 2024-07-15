@@ -3,7 +3,7 @@ from django.db import models
 from django.utils.timesince import timesince
 from account.models import User
 from django.contrib.humanize.templatetags.humanize import naturaltime
-
+from django.conf import settings
 # Create your models here.
 
 class Like(models.Model):
@@ -30,7 +30,7 @@ class PostAttachment(models.Model):
 
     def get_image(self):
         if self.image:
-            return 'http://127.0.0.1:8000' + self.image.url
+            return settings.WEBSITE_URL + self.image.url
         else:
             return 'Error loading image'
 

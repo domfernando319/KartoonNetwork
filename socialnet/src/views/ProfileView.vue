@@ -3,6 +3,8 @@
 import PeopleYouMayKnow from '@/components/PeopleYouMayKnow.vue';
 import Trends from '@/components/Trends.vue';
 import FeedItem from '@/components/FeedItem.vue';
+import FeedForm from '@/components/FeedForm.vue';
+
 import axios from 'axios';
 import { useUserStore } from '../stores/user';
 import { useToastStore } from '@/stores/toast';
@@ -23,7 +25,8 @@ export default {
     Trends,
     FeedItem,
     PeopleYouMayKnow,
-    RouterLink
+    RouterLink,
+    FeedForm,
 },
 
     data() {
@@ -33,8 +36,7 @@ export default {
                 id: ''
             },
             can_send_friend_request: null,
-            body: '',
-            url: null,
+            
 
         }
     },
@@ -89,30 +91,7 @@ export default {
                 console.log('error', error)
             })
         },
-        submitForm() {
-            console.log('submitForm', this.body)
-            let formData = new FormData()
-            formData.append('image', this.$refs.file.files[0])
-            formData.append('body', this.body)
-
-            axios
-                .post('/api/posts/create/', formData, {
-                    headers: {
-                        "Content-Type": "multipart/form-data",
-                    }
-                })
-                .then(response => {
-                    console.log('data', response.data)
-                    this.posts.unshift(response.data)
-                    this.body = ''
-                    this.$refs.file.value = null
-                    this.url = null
-                    this.user.post_count += 1
-                })
-                .catch(error => {
-                    console.log('error', error)
-                })
-        },
+        
 
         sendFriendRequest() {
             axios
@@ -208,28 +187,8 @@ export default {
         <div v-if="user" class="main-center col-span-2 space-y-4">
 
             <div class="bg-white border border-gray-200 rounded-lg" v-if="userStore.user.id === user.id">
-                <form v-on:submit.prevent="submitForm" method="post">
-                    <div class="p-4">  
-                        <textarea v-model="body" class="p-4 w-full bg-gray-100 rounded-lg" placeholder="What are you thinking about?"></textarea>
-                        <div id="preview" v-if="url">
-                            <img :src="url" class="w-[150px] mt-3 rounded-xl"/>
-
-
-                        </div>
-                    </div>
-
-
-    
-                    <div class="p-4 border-t border-gray-100 flex justify-between">
-                        
-                        <label class="custom-file-upload inline-block py-4 px-6 bg-gray-600 text-white rounded-lg">
-                            <input type="file" ref="file" @change="onFileChange">
-                            Attach Image
-                        </label>
-                        <button class="inline-block py-4 px-6 bg-purple-600 text-white rounded-lg">Post</button>
-                    
-                    </div>
-                </form>
+                <FeedForm v-bind:user="user" v-bind:posts="posts"/>
+                
             </div>
             
             <div 
