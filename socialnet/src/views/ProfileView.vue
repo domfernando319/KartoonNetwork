@@ -30,10 +30,11 @@ export default {
         return {
             posts: [],
             user:{
-                id: null
+                id: ''
             },
+            can_send_friend_request: null,
             body: '',
-            url: '',
+            url: null,
 
         }
     },
@@ -82,6 +83,7 @@ export default {
                 console.log('data', response.data)
                 this.posts = response.data.posts
                 this.user = response.data.user
+                this.can_send_friend_request = response.data.can_send_friend_request
             })
             .catch(error => {
                 console.log('error', error)
@@ -116,10 +118,17 @@ export default {
             axios
                 .post(`/api/friends/${this.$route.params.id}/request/`)
                 .then(response => {
-                    console.log("ahhhhh")
-                    if (response.data.message == 'request already sent') {
+                    console.log('data', response.data)
+                    this.can_send_friend_request = false
+                    if (response.data.message == 'friend request already sent') {
+                        setTimeout(function() {
+							alert('request already sent')
+						}, 500);
                         this.toastStore.showToast(5000, 'A request has already been sent!', 'bg-red-300')
                     } else {
+                        setTimeout(function() {
+							alert('Friend request sent!')
+						}, 500);
                         this.toastStore.showToast(5000, 'Friend request sent!', 'bg-emerald-300')
                     }
                 })
@@ -161,7 +170,7 @@ export default {
                         class="inline-block py-1 px-4 bg-purple-600 text-xs text-white rounded-lg" 
                         style="white-space: nowrap;" 
                         @click="sendFriendRequest"
-                        v-if="userStore.user.id !== user.id"
+                        v-if="userStore.user.id !== user.id && can_send_friend_request"
                     >
                         Add Friend
                     </button>

@@ -88,12 +88,6 @@ def friends(request, pk):
     user = User.objects.get(pk=pk)
     requests = []
 
-    u = request.user
-    u.friends_count = 1
-    u.save()
-
-    user.friends_count = 1
-    user.save()
     if user == request.user:
         requests = FriendRequest.objects.filter(created_for=request.user, status=FriendRequest.SENT)
         requests = FriendRequestSerializer(requests, many=True)
@@ -107,7 +101,10 @@ def friends(request, pk):
     }, safe=False)
 
 
-
+@api_view(["GET"])
+def my_friend_suggestions(request):
+     serializer = UserSerializer(request.user.friend_suggestions.all(), many=True)
+     return JsonResponse(serializer.data, safe=False)
 
 @api_view(['POST'])
 def send_friend_request(request, pk):
