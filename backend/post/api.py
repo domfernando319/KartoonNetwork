@@ -68,6 +68,7 @@ def post_list_profile(request, id): #id will be own user id or id of user youre 
 def post_create(request):
 
     form = PostForm(request.POST)
+    attachment = None
     attachment_form = AttachmentForm(request.POST, request.FILES)
 
     if attachment_form.is_valid():
