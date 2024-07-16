@@ -3,7 +3,7 @@ from django.db import models
 from django.utils.timesince import timesince
 from account.models import User
 from django.contrib.humanize.templatetags.humanize import naturaltime
-
+from django.conf import settings
 # Create your models here.
 
 class Like(models.Model):
@@ -27,6 +27,13 @@ class PostAttachment(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     image = models.ImageField(upload_to ="post_attachments")
     created_by = models.ForeignKey(User, related_name='post_attachments', on_delete=models.CASCADE)
+
+    def get_image(self):
+        if self.image:
+            return settings.WEBSITE_URL + self.image.url
+        else:
+            return 'Error loading image'
+
 
 class Post(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

@@ -2,8 +2,8 @@ from django.http import JsonResponse
 from .serializers import CommentSerializer, PostSerializer, PostDetailSerializer, TrendSerializer
 from .models import Post, Like, Comment, Trend
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
-from .forms import PostForm
-from account.models import User
+from .forms import PostForm, AttachmentForm
+from account.models import User, FriendRequest
 from account.serializers import UserSerializer
 
 # Create your views here.
@@ -45,9 +45,21 @@ def post_list_profile(request, id): #id will be own user id or id of user youre 
 
     posts_serializer = PostSerializer(posts, many=True)
     user_serializer = UserSerializer(user)
+
+    can_send_friend_request = True
+    if request.user in user.friends.all():
+        can_send_friend_request = False
+
+    user_to_you = FriendRequest.objects.filter(created_for=request.user).filter(created_by=user)
+    you_to_user = FriendRequest.objects.filter(created_for=user).filter(created_by=request.user)
+
+    if user_to_you or you_to_user:
+        can_send_friend_request = False
+
     return JsonResponse({
         'posts': posts_serializer.data,
-        'user': user_serializer.data
+        'user': user_serializer.data,
+        'can_send_friend_request': can_send_friend_request,
     }, safe=False)
 
 
@@ -55,12 +67,25 @@ def post_list_profile(request, id): #id will be own user id or id of user youre 
 @api_view(['POST'])
 def post_create(request):
 
-    form = PostForm(request.data)
+    form = PostForm(request.POST)
+    attachment = None
+    attachment_form = AttachmentForm(request.POST, request.FILES)
+
+    if attachment_form.is_valid():
+        attachment = attachment_form.save(commit=False)
+        attachment.created_by = request.user
+        attachment.save()
+
+    
     if form.is_valid():
         post = form.save(commit=False)
         post.created_by = request.user
+
+
         post.save()
 
+        if attachment:
+            post.attachments.add(attachment)
         user = request.user
         user.post_count += 1
         user.save()
@@ -97,6 +122,12 @@ def post_create_comment(request, pk):
 
     return JsonResponse(serializer.data, safe=False)
 
+@api_view(['DELETE'])
+def post_delete(request, pk):
+    post = Post.objects.filter(created_by=request.user).get(pk=pk)
+    post.delete()
+
+    return JsonResponse({'message': 'post deleted'})
 
 @api_view(['GET'])
 def get_trends(request):
@@ -104,4 +135,5 @@ def get_trends(request):
     serializer = TrendSerializer(trends, many=True)
 
     return JsonResponse(serializer.data, safe=False)
+
 

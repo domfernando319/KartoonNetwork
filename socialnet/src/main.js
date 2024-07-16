@@ -7,8 +7,9 @@ import App from './App.vue'
 import router from './router'
 import axios from 'axios'
 
+// console.log('URL:', import.meta.env.VITE_API_URL)
 //later when we include django views we wont have to include base url each time
-axios.defaults.baseURL = 'http://127.0.0.1:8000' 
+axios.defaults.baseURL = import.meta.env.VITE_API_URL 
 
 const app = createApp(App)
 

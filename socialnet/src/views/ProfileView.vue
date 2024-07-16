@@ -3,6 +3,8 @@
 import PeopleYouMayKnow from '@/components/PeopleYouMayKnow.vue';
 import Trends from '@/components/Trends.vue';
 import FeedItem from '@/components/FeedItem.vue';
+import FeedForm from '@/components/FeedForm.vue';
+
 import axios from 'axios';
 import { useUserStore } from '../stores/user';
 import { useToastStore } from '@/stores/toast';
@@ -23,16 +25,18 @@ export default {
     Trends,
     FeedItem,
     PeopleYouMayKnow,
-    RouterLink
+    RouterLink,
+    FeedForm,
 },
 
     data() {
         return {
             posts: [],
             user:{
-                id: null
+                id: ''
             },
-            body: '',
+            can_send_friend_request: null,
+            
 
         }
     },
@@ -54,6 +58,11 @@ export default {
     },
 
     methods: {
+        deletePost(id) {
+            this.posts = this.posts.filter(post => post.id !== id)
+
+        },
+
         sendDM() {
             console.log("send dm")
 
@@ -76,36 +85,29 @@ export default {
                 console.log('data', response.data)
                 this.posts = response.data.posts
                 this.user = response.data.user
+                this.can_send_friend_request = response.data.can_send_friend_request
             })
             .catch(error => {
                 console.log('error', error)
             })
         },
-        submitForm() {
-            console.log('submitForm', this.body)
-            axios
-                .post('/api/posts/create/', {
-                    'body': this.body
-                })
-                .then(response => {
-                    console.log('data', response.data)
-                    this.posts.unshift(response.data)
-                    this.body = ''
-                    this.user.post_count += 1
-                })
-                .catch(error => {
-                    console.log('error', error)
-                })
-        },
+        
 
         sendFriendRequest() {
             axios
                 .post(`/api/friends/${this.$route.params.id}/request/`)
                 .then(response => {
-                    console.log("ahhhhh")
-                    if (response.data.message == 'request already sent') {
+                    console.log('data', response.data)
+                    this.can_send_friend_request = false
+                    if (response.data.message == 'friend request already sent') {
+                        setTimeout(function() {
+							alert('request already sent')
+						}, 500);
                         this.toastStore.showToast(5000, 'A request has already been sent!', 'bg-red-300')
                     } else {
+                        setTimeout(function() {
+							alert('Friend request sent!')
+						}, 500);
                         this.toastStore.showToast(5000, 'Friend request sent!', 'bg-emerald-300')
                     }
                 })
@@ -144,16 +146,16 @@ export default {
 
                 <div class="mt-6 flex flex-col items-center space-y-4" >
                     <button 
-                        class="inline-block py-1 px-4 bg-purple-600 text-xs text-white rounded-lg" 
+                        class="inline-block py-1 px-4 bg-blue-600 text-xs text-white rounded-lg" 
                         style="white-space: nowrap;" 
                         @click="sendFriendRequest"
-                        v-if="userStore.user.id !== user.id"
+                        v-if="userStore.user.id !== user.id && can_send_friend_request"
                     >
                         Add Friend
                     </button>
 
                     <button 
-                        class="inline-block py-1 px-4 bg-purple-600 text-xs text-white rounded-lg" 
+                        class="inline-block py-1 px-4 bg-blue-600 text-xs text-white rounded-lg" 
                         style="white-space: nowrap;" 
                         @click="sendDM"
                         v-if="userStore.user.id !== user.id"
@@ -185,17 +187,8 @@ export default {
         <div v-if="user" class="main-center col-span-2 space-y-4">
 
             <div class="bg-white border border-gray-200 rounded-lg" v-if="userStore.user.id === user.id">
-                <form v-on:submit.prevent="submitForm" method="post">
-                    <div class="p-4">  
-                        <textarea v-model="body" class="p-4 w-full bg-gray-100 rounded-lg" placeholder="What are you thinking about?"></textarea>
-                    </div>
-    
-                    <div class="p-4 border-t border-gray-100 flex justify-between">
-                        <a href="#" class="inline-block py-4 px-6 bg-gray-600 text-white rounded-lg">Attach image</a>
-    
-                        <button class="inline-block py-4 px-6 bg-purple-600 text-white rounded-lg">Post</button>
-                    </div>
-                </form>
+                <FeedForm v-bind:user="user" v-bind:posts="posts"/>
+                
             </div>
             
             <div 
@@ -203,7 +196,7 @@ export default {
                 v-for="post in posts"
                 v-bind:key="post.id"
             >
-                <FeedItem v-bind:post="post"/>
+                <FeedItem v-bind:post="post" v-on:deletePost="deletePost"/>
             </div>
             <div 
                 class="p-4 bg-white border border-gray-200 rounded-lg"
@@ -218,3 +211,17 @@ export default {
         </div>
     </div>
 </template>
+
+<style>
+    input[type='file'] {
+        display: none;
+    }
+
+    .custom-file-upload {
+        border: 1px solid #ccc;
+        display: inline-block;
+        padding: 14px 12px;
+        cursor: pointer;
+
+    }
+</style>
